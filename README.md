@@ -28,7 +28,7 @@
 
 ### Architecture
 
-<center><img src = './images/DenseNet201_arch.png'/></center>
+<center><img src = './images/DenseNet201_arch.png' width=450px/></center>
 
 <br>
 
