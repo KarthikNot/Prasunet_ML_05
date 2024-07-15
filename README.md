@@ -24,6 +24,14 @@
 
 <br>
 
+## Fine Tuning Pretrained Model - DenseNet201 🚀
+
+### Architecture
+
+<center><img src = './images/DenseNet201_arch.png'/></center>
+
+<br>
+
 ## Model Evaluation 🤖
 
 ### <center><i>Training and Validation Data Performance</i> 📈</center>

@@ -18,7 +18,7 @@ classes = ['macarons', 'french_toast', 'lobster_bisque', 'prime_rib', 'pork_chop
            'sashimi', 'pad_thai', 'french_fries']
 
 def preprocess_image(image):
-    img = cv2.resize(img, (224,224))
+    img = cv2.resize(image, (224,224))
     img = img / 255.0
     img = np.expand_dims(img, axis=0)
     return img
@@ -27,7 +27,7 @@ def preprocess_image(image):
 def capture_video():
     # Open the video capture
     cap = cv2.VideoCapture(0)  # 0 corresponds to the first webcam connected
-    model = load_model('./models/model_89A_73VA.h5')
+    model = load_model('./models/best_model1.keras')
     if model is None: return
 
     if not cap.isOpened():
@@ -43,9 +43,10 @@ def capture_video():
             break
 
         image = preprocess_image(frame)
-        predicts = classes[np.argmax(model.predict(image))]
-        cv2.putText(frame, predicts, (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
+        pred = model.predict(image)
+        predicts = classes[np.argmax(pred)]
 
+        cv2.putText(frame, predicts, (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
         cv2.imshow('Video Capture', frame)
 
         if cv2.waitKey(10) & 0xFF == ord('q'):
@@ -53,5 +54,3 @@ def capture_video():
 
     cap.release()
     cv2.destroyAllWindows()
-
-capture_video()

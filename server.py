@@ -1,17 +1,17 @@
-import streamlit as st #type: ignore
+import streamlit as st 
 import cv2
 import numpy as np
 from keras.models import load_model #type:ignore
 from live_video import capture_video
+import matplotlib.pyplot as plt
 
-st.set_page_config(page_icon='✌️', page_title='Hand Gesture Classification', layout="wide")
-st.markdown('<div style="text-align:center;font-size:50px;">HAND GESTURE CLASSIFICATION 🤚</div>', unsafe_allow_html=True)
+st.set_page_config(page_icon='🍽️', page_title='Food Image Classification', layout="wide")
+st.markdown('<div style="text-align:center;font-size:50px;">Food Images Classification 🍝</div>', unsafe_allow_html=True)
 
-# Load the model
 try:
-    model = load_model('./models/model_89A_73VA.h5')
+    model = load_model('./models/best_model1.keras')
 except Exception as e:
-    st.error(f"Error loading model: {e}")
+    st.error(f"Error loading the model:{e}")
 
 classes = ['macarons', 'french_toast', 'lobster_bisque', 'prime_rib', 'pork_chop', 'guacamole', 'baby_back_ribs', 'mussels', 
            'beef_carpaccio', 'poutine', 'hot_and_sour_soup', 'seaweed_salad', 'foie_gras', 'dumplings', 'peking_duck', 
@@ -37,6 +37,7 @@ def preprocess_image(image):
         img = cv2.resize(img, (224, 224))
         img = img / 255.0
         img = np.expand_dims(img, axis=0)
+        st.image(img)
         return img
     except Exception as e:
         st.error(f"Error processing image: {e}")
@@ -46,7 +47,6 @@ def preprocess_image(image):
 def classify_image(image):
     try:
         image = preprocess_image(image)
-        st.write(image)
         if image is not None:
             prediction = model.predict(image)
             predicted_class = classes[np.argmax(prediction)]
@@ -67,6 +67,7 @@ def main():
         uploaded_file = st.file_uploader('Choose an image...', type=['jpg', 'jpeg', 'png'])
 
         if uploaded_file is not None:
+            st.image(uploaded_file, width = 450)
             if st.button('Classify Image'):
                 predicted_class, confidence, prediction = classify_image(uploaded_file)
                 if predicted_class is not None:
@@ -81,3 +82,6 @@ def main():
         if st.button('Start'):
             st.write('To stop the live capture press Q on keyboard')
             capture_video()
+
+if __name__ == '__main__':
+    main()
